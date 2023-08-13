@@ -2,6 +2,7 @@ package com.example.offline_notification
 
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
@@ -23,12 +24,15 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity,
                 { _: TimePicker, hourOfDay: Int, minute: Int ->
                     timeInMillis = System.currentTimeMillis()
-                    set(Calendar.HOUR_OF_DAY, hourOfDay) // 8 PM
+                    set(Calendar.HOUR_OF_DAY, get(Calendar.HOUR_OF_DAY)) // 8 PM
                     set(Calendar.MINUTE, minute)
                     set(Calendar.SECOND, 0)
 //                    val selectedTime = formatTime(hourOfDay, minute)
 //                notiRec.cancelNotification(this, selectedTime)
-                    notiRec.setNotification(this@MainActivity, timeInMillis, timeInMillis)
+                    notiRec.setNotification(
+                        this@MainActivity, timeInMillis, timeInMillis,
+                        START_NOTIFICATION_SERVICE
+                    )
                     // You can set the alarm using the selectedTime
                 }, get(Calendar.HOUR_OF_DAY), get(Calendar.MINUTE), false
             )

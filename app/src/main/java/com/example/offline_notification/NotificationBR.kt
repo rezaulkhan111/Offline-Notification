@@ -8,24 +8,37 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import kotlin.math.abs
 
 class NotificationBR : BroadcastReceiver() {
     private var alarmMgr: AlarmManager? = null
     private var pendingIntent: PendingIntent? = null
-    private var FIVE_MINUTES: Long = 60000 * 5
 
     override fun onReceive(context: Context, intent: Intent) {
+        val receivedIntentValue = intent.getStringExtra(ACTION_PASS_NOTIFICATION_SERVICE_TYPE)
+
         val notifiTime = intent.getLongExtra(ACTION_PASS_Notification_TIME, -1)
         val timePassed = System.currentTimeMillis() >= notifiTime
-        if (timePassed) {
-            val renewTime = aaaaaaa()
-            setNotification(context, renewTime, renewTime)
 
-            Intent(context, NotificationService::class.java)
-                .also {
-                    startService(context, it)
+        if (timePassed) {
+            when (receivedIntentValue) {
+                START_NOTIFICATION_SERVICE -> {
+                    val renewTime = featureDateTime()
+                    setNotification(context, renewTime, renewTime, START_NOTIFICATION_SERVICE)
+
+                    Intent(context, NotificationService::class.java)
+                        .also {
+                            startService(context, it)
+                        }
                 }
+
+                DISMISS_CURRENT_NOTIFICATION_SERVICE -> {
+                    NotificationPlayer.releaseMediaPlayer()
+                    Intent(context, NotificationService::class.java)
+                        .also {
+                            context.stopService(it)
+                        }
+                }
+            }
         }
     }
 
@@ -39,16 +52,22 @@ class NotificationBR : BroadcastReceiver() {
     }
 
     @SuppressLint("UnspecifiedImmutableFlag", "ObsoleteSdkInt")
-    fun setNotification(context: Context, notifiTime: Long, mRequestCode: Long) {
+    fun setNotification(
+        context: Context,
+        notifiTime: Long,
+        mRequestCode: Long,
+        requestType: String
+    ) {
         alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, NotificationBR::class.java)
+        intent.putExtra(ACTION_PASS_NOTIFICATION_SERVICE_TYPE, requestType)
         intent.putExtra(ACTION_PASS_Notification_TIME, notifiTime)
         Log.e("NB", "setNotification: " + notifiTime)
         pendingIntent = PendingIntent.getBroadcast(
             context,
             mRequestCode.toInt(),
             intent,
-            0
+            PendingIntent.FLAG_MUTABLE
         )
         alarmMgr!!.setRepeating(
             AlarmManager.RTC_WAKEUP,
@@ -58,7 +77,7 @@ class NotificationBR : BroadcastReceiver() {
         )
     }
 
-    fun cancelNotification(context: Context, mRequestCode: Long) {
+    fun cancelNotification(context: Context, mRequestCode: Long, requestType: String) {
         context.let {
             if (alarmMgr == null) {
                 alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -67,6 +86,7 @@ class NotificationBR : BroadcastReceiver() {
         alarmMgr?.let {
             if (pendingIntent == null) {
                 val intent = Intent(context, NotificationBR::class.java)
+                intent.putExtra(ACTION_PASS_NOTIFICATION_SERVICE_TYPE, requestType)
                 pendingIntent = PendingIntent.getBroadcast(
                     context,
                     mRequestCode.toInt(),

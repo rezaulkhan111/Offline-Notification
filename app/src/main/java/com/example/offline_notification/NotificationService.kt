@@ -1,9 +1,8 @@
 package com.example.offline_notification
 
-import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.IBinder
 import android.util.Log
 
@@ -17,24 +16,21 @@ class NotificationService : Service() {
         NotificationControl.initNotificationManager(this)
         NotificationControl.createNotificationChannel(
             NOTIFICATION_CHANNEL_NAME,
-            NOTIFICATION_CHANNEL_DESC, NOTIFICATION_CHANNEL_ID
+            NOTIFICATION_CHANNEL_DESC,
+            NOTIFICATION_CHANNEL_ID
         )
-        val notificationBuilder = NotificationControl.createNotification(this)
-        val notification = notificationBuilder.build()
 
-        startForeground(122, notification)
+        NotificationPlayer.playAudioRawFolder(
+            this,
+            Uri.parse("android.resource://" + packageName + "/" + R.raw.azan_common)
+        )
+        val notificationBuild = NotificationControl.createNotification(this).build()
+        startForeground(NOTIFICATION_ID, notificationBuild)
         return START_STICKY
     }
 
-
-    private fun notificationDeleteIntent(context: Context): PendingIntent {
-        Log.e("", "getNotificationDeleteIntent: " + "delete")
-        return PendingIntent.getBroadcast(
-            context,
-            0,
-            Intent(context, NotificationBR::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or
-                    PendingIntent.FLAG_IMMUTABLE
-        )
+    override fun onDestroy() {
+        NotificationPlayer.releaseMediaPlayer()
+        super.onDestroy()
     }
 }
