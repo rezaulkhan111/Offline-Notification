@@ -32,7 +32,7 @@ fun featureDateTime(): Long {
     calendar.set(Calendar.SECOND, 0)
     calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1)
 
-    Log.e("CON", "aaaaaaa: " + calendar.timeInMillis)
+    Log.e("CON", "featureDateTime: " + calendar.timeInMillis)
 
     return calendar.timeInMillis
 }

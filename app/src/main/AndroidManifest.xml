@@ -40,7 +40,11 @@
         <service
             android:name=".NotificationService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.offline_notification.START_BACKGROUND" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

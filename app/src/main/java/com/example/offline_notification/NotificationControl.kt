@@ -61,7 +61,6 @@ object NotificationControl {
                 setCustomContentView(generateCustomNotification(context, packageName))
                 setContentText("test")
                 setOngoing(false)
-                setDeleteIntent(notificationDeleteIntent(context))
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 setAutoCancel(true)
 
@@ -91,7 +90,7 @@ object NotificationControl {
         )
         notificationLayout.setImageViewResource(
             R.id.iv_notification_dismiss,
-            R.drawable.ic_launcher_foreground
+            R.drawable.ic_launcher_background
         )
 
         val close = Intent(
@@ -105,7 +104,21 @@ object NotificationControl {
         }
         notificationLayout.setOnClickPendingIntent(
             R.id.iv_notification_dismiss,
-            PendingIntent.getBroadcast(context, 0, close, PendingIntent.FLAG_CANCEL_CURRENT)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    close,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            } else {
+                PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    close,
+                    PendingIntent.FLAG_CANCEL_CURRENT
+                )
+            }
         )
         return notificationLayout
     }
