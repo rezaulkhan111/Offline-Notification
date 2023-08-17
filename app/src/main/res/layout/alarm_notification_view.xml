@@ -21,7 +21,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
@@ -29,8 +28,7 @@
                     android:id="@+id/iv_notification_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/app_name"
-                    tools:ignore="NestedWeights" />
+                    android:contentDescription="@string/app_name" />
 
                 <TextView
                     android:id="@+id/tv_notification_title"
@@ -47,7 +45,8 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="20dp"
-                android:text="notification details" />
+                android:text="notification details"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <LinearLayout
@@ -55,7 +54,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.50"
-            android:background="@color/white"
             android:gravity="center"
             android:orientation="vertical">
 

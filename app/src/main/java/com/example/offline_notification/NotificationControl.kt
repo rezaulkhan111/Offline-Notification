@@ -59,6 +59,7 @@ object NotificationControl {
                 setSmallIcon(R.drawable.ic_launcher_foreground)
                 setContentTitle(context.resources.getString(R.string.app_name))
                 setCustomContentView(generateCustomNotification(context, packageName))
+                setContentText("Notification Message")
                 setOngoing(false)
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 setAutoCancel(true)
@@ -80,11 +81,11 @@ object NotificationControl {
 
         notificationLayout.setTextViewText(
             R.id.tv_notification_title,
-            "test"
+            context.resources.getString(R.string.app_name)
         )
         notificationLayout.setTextViewText(
             R.id.tv_notification_message,
-            context.resources.getString(R.string.app_name)
+            "message"
         )
         notificationLayout.setImageViewResource(
             R.id.iv_notification_dismiss,
