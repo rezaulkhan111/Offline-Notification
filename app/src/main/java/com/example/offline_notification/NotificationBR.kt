@@ -71,7 +71,7 @@ class NotificationBR : BroadcastReceiver() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Log.e("NBR", "setNotification: if")
-            pendingIntent = PendingIntent.getActivity(
+            pendingIntent = PendingIntent.getBroadcast(
                 context,
                 mRequestCode.toInt(),
                 intent,
@@ -79,9 +79,8 @@ class NotificationBR : BroadcastReceiver() {
                         PendingIntent.FLAG_UPDATE_CURRENT
             )
 
-            alarmMgr!!.setAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                notifiTime,
+            alarmMgr!!.setAlarmClock(
+                AlarmManager.AlarmClockInfo(notifiTime, pendingIntent),
                 pendingIntent
             )
         } else {

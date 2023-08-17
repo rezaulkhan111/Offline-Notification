@@ -59,7 +59,6 @@ object NotificationControl {
                 setSmallIcon(R.drawable.ic_launcher_foreground)
                 setContentTitle(context.resources.getString(R.string.app_name))
                 setCustomContentView(generateCustomNotification(context, packageName))
-                setContentText("test")
                 setOngoing(false)
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 setAutoCancel(true)
@@ -77,7 +76,6 @@ object NotificationControl {
 
     @SuppressLint("RemoteViewLayout", "UnspecifiedImmutableFlag")
     fun generateCustomNotification(context: Context, packageName: String): RemoteViews {
-//        val notificationManagerCompat = NotificationManagerCompat.from(context)
         val notificationLayout = RemoteViews(packageName, R.layout.alarm_notification_view)
 
         notificationLayout.setTextViewText(
@@ -90,7 +88,7 @@ object NotificationControl {
         )
         notificationLayout.setImageViewResource(
             R.id.iv_notification_dismiss,
-            R.drawable.ic_launcher_background
+            R.drawable.ic_baseline_cancel_24
         )
 
         val close = Intent(
@@ -109,7 +107,8 @@ object NotificationControl {
                     context,
                     0,
                     close,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_MUTABLE or
+                            PendingIntent.FLAG_UPDATE_CURRENT
                 )
             } else {
                 PendingIntent.getBroadcast(
