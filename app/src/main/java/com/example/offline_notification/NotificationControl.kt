@@ -54,12 +54,13 @@ object NotificationControl {
         val packageName = context.packageName
         val intent: Intent = pmAppManager.getLaunchIntentForPackage(packageName)!!
 
+
         return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .apply {
-                setSmallIcon(R.drawable.ic_launcher_foreground)
+                setSmallIcon(R.drawable.ic_notifi_icon)
                 setContentTitle(context.resources.getString(R.string.app_name))
                 setCustomContentView(generateCustomNotification(context, packageName))
-                setContentText("Notification Message")
+                setContentText("Notification Message Full name araf high")
                 setOngoing(false)
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 setAutoCancel(true)
@@ -69,7 +70,7 @@ object NotificationControl {
                         context,
                         0,
                         intent,
-                        PendingIntent.FLAG_IMMUTABLE
+                        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )
                 )
             }
@@ -85,7 +86,7 @@ object NotificationControl {
         )
         notificationLayout.setTextViewText(
             R.id.tv_notification_message,
-            "message"
+            "Notification Message Full name araf high"
         )
         notificationLayout.setImageViewResource(
             R.id.iv_notification_dismiss,
